@@ -99,6 +99,87 @@ public class ArbolBB {
     }
     
     
+    public void borrar(Object o){
+        borrar(raiz,o);
+    }
+    
+    private NodoBin borrar(NodoBin n, Object o){
+        if(n==null){
+            return null;
+        }
+        else{
+            if((Integer)o<(Integer)n.getDato()){
+                n.setIzq(borrar(n.getIzq(),o));
+            }
+            else{
+                if((Integer)o>(Integer)n.getDato()){
+                n.setDer(borrar(n.getDer(),o));
+                }
+                else{ //Ya encontré el que quiero eliminar!
+                    if(n.getIzq()!=null && n.getDer()!=null){
+                        //Es decir que tiene los 2 hijos+
+                        
+                        NodoBin minimo = buscarMin(n.getDer()); //Aqui es cuando asignamos quien sustituye
+                        //el lugar del que sera eliminado.
+                        n.setDato(minimo.getDato());
+                        n.setDer(borrarMin(n.getDer()));
+                        
+                        //Agregar de alguna forma el otro metodo para reubicar el nuevo nodo (Maximo)
+                        
+                        
+                        
+                        //
+                        
+                    }
+                    
+                    
+                    else{ //Que no tiene 2 hijos, puede tener 1 o ninguno
+                        n = (n.getIzq()!=null)? n.getIzq():n.getDer(); //Otra forma de hacer un if para 
+                        //asignar un valor, antes del ? es la condicion y las sentencias separadas por el signo : es 
+                        //la afirmacion y el en caso contrario.
+                    }
+                }
+            }
+        }
+        
+        return n;
+    }
+    
+    private NodoBin buscarMin(NodoBin n){
+        while(n.getIzq()!=null){
+            n = n.getIzq();
+        }
+        return n;
+    }
+    
+    private NodoBin borrarMin(NodoBin n){
+        if(n.getIzq()!=null){
+            n.setIzq(borrarMin(n.getIzq()));
+            return n;
+        }
+        else{
+            return n.getDer();
+        }
+    }
+    
+    private NodoBin buscarMax(NodoBin n){
+        while(n.getDer()!=null){
+            n = n.getDer();
+        }
+        return n;
+    }
+    
+    private NodoBin borrarMax(NodoBin n){
+        if(n.getDer()!=null){
+            n.setDer(borrarMax(n.getDer()));
+            return n;
+        }
+        else{
+            return n.getIzq();
+        }
+    }
+    
+    
     public static void main(String[] args) {
         ArbolBB arbol = new ArbolBB(28);
         arbol.insertar(92);
@@ -119,15 +200,19 @@ public class ArbolBB {
             System.out.println("El dato no se encuentra");
         }
         
-       /* System.out.println("Arbol inOrden");
+        System.out.println("Arbol inOrden");
         arbol.inOrden();
         
-        System.out.println("Arbol preOrden");
+        /*System.out.println("Arbol preOrden");
         arbol.preOrden();
         
         System.out.println("Arbol posOrden");
         arbol.posOrden();
         */
+       
+       arbol.borrar(14);
+       System.out.println("\nBorrando el 602");
+       arbol.inOrden();
         
     }
     
